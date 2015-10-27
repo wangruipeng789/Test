@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,14 +40,27 @@ public class MyTankGame9 extends JFrame{
 class MyPanel extends JPanel implements KeyListener{
 	//定义我的一个坦克，一定要在panel中
 	Hero hero=null;
+	//定义敌人的坦克
+	Vector<EnergyTank> ets=new Vector<EnergyTank>();
+	int ensize=3;//定义敌人的坦克数量显示的
 	//构造函数
 	public MyPanel(){
 		hero =new Hero(10, 10);//一开始的位置
+		for(int i=0;i<ensize;i++){
+			//创建敌人坦克
+			EnergyTank et=new EnergyTank((i+50), 0);
+			et.setColor(Color.cyan);
+			ets.add(et);
+		}
 	}
 	//这个函数是自动调用的
 	public void paint(Graphics g){
 		super.paint(g);
 		drawTank(hero.getX(),hero.getY(),g,hero.direct, 0);
+		//画敌人的坦克
+		for(int i=0;i<ets.size();i++){
+			this.drawTank(ets.get(i).getX(), ets.get(i).getY(), g, ets.get(i).getDirect(), 1);
+		}
 	}
 	//画出坦克的函数
 	public void drawTank(int x,int y,Graphics g,int direct,int type){//跟据这些参数画
@@ -129,6 +143,13 @@ class Tank
 	int direct=0;//0,1,2,3上右下左
 	//坦克的速度
 	int speed=5;//默认速度是1
+	Color color;
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
+	}
 	public int getSpeed() {
 		return speed;
 	}
@@ -179,4 +200,26 @@ class Hero extends Tank{
 	public void moveDown(){
 		this.y+=speed;
 	}
+}
+class EnergyTank extends Tank{
+	public EnergyTank(int x, int y) {
+		super(x, y);
+		// TODO Auto-generated constructor stub
+	}
+	//坦克向上移动
+		public void moveUp(){
+			this.y-=speed;
+		}
+		//坦克向右移动
+		public void moveR(){
+			this.x+=speed;
+		}
+		//坦克向左移动
+		public void moveL(){
+			this.x-=speed;
+		}
+		//坦克向下移动
+		public void moveDown(){
+			this.y+=speed;
+		}
 }
